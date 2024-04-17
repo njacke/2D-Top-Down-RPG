@@ -101,6 +101,9 @@ GameObject:
   - component: {fileID: 1804591474912120065}
   - component: {fileID: 6688274987454381957}
   - component: {fileID: 5273206073626141528}
+  - component: {fileID: 7336530831121975678}
+  - component: {fileID: 5547629214688558418}
+  - component: {fileID: 5647364389764226202}
   m_Layer: 0
   m_Name: Slime
   m_TagString: Untagged
@@ -250,6 +253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eebb8ffda841eda4cb5cd2fe629911a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roamChangeDirFloat: 2
 --- !u!114 &6981274232772686503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,6 +281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingHealth: 3
   deathVFXPrefab: {fileID: 4734091471250881913, guid: ba5a523372108fd45ba9e39e0f2c4e77, type: 3}
+  knockBackThrust: 15
 --- !u!114 &6688274987454381957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,3 +309,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   whiteFlashMat: {fileID: 2100000, guid: 8e03289d5f93ad045aa3e602cb9a2cb1, type: 2}
   restoreDefaultMatTime: 0.1
+--- !u!114 &7336530831121975678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6191210520292029399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb846d18a3c1a6642b000b352d7fd6fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &5547629214688558418
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6191210520292029399}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4886d7174becf844ea180507898d7fda, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!210 &5647364389764226202
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6191210520292029399}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
