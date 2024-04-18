@@ -12,6 +12,7 @@ public class SpriteFade : MonoBehaviour
     }
 
     public IEnumerator SlowFadeRoutine(){
+        Debug.Log("Slow fade routine started.");
         float elapsedTime = 0;
         float startValue = spriteRenderer.color.a;
 
@@ -21,7 +22,6 @@ public class SpriteFade : MonoBehaviour
             spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, newAlpha);
             yield return null;
         }
-
         Destroy(gameObject);
     }
 }

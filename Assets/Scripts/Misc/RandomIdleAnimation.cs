@@ -11,6 +11,8 @@ public class RandomIdleAnimation : MonoBehaviour
     }
 
     private void Start() {
+        if (!myAnimator) { return; }
+
         //index 0 returns current state info for first animation (idle)
         AnimatorStateInfo state = myAnimator.GetCurrentAnimatorStateInfo(0);
         myAnimator.Play(state.fullPathHash, -1, Random.Range(0f, 1f));
