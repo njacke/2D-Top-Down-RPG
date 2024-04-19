@@ -1,24 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : Singleton<PlayerHealth>
 {
+    public bool IsDead {get; private set;}
+
     [SerializeField] private int maxHealth = 3;
     [SerializeField] private float knockBackThrustAmount = 10f;
     [SerializeField] private float damageRecoveryTime = 1f;
+
     private int currentHealth;
     private bool canTakeDamage = true;
     private Knockback knockback;
     private Flash flash;
+    private Slider healthSlider;
 
-    private void Awake() {
+    const string HEALTH_SLIDER_TEXT = "Health Slider";
+    const string TOWN_TEXT = "Town";
+    readonly int DEATH_HASH = Animator.StringToHash("Death");
+
+    protected override void Awake() {
+        base.Awake();
+
         knockback = GetComponent<Knockback>();
         flash = GetComponent<Flash>();
     }
 
     private void Start(){
+        IsDead = false;
+
         currentHealth = maxHealth;
+        UpdateHealthSlider();
     }
 
     private void OnCollisionStay2D(Collision2D other) {
@@ -26,6 +42,13 @@ public class PlayerHealth : MonoBehaviour
 
         if (enemy){
             TakeDamage(1, other.transform);
+        }
+    }
+
+    public void HealPlayer() {
+        if (currentHealth < maxHealth){
+            currentHealth += 1;
+            UpdateHealthSlider();
         }
     }
 
@@ -40,10 +63,38 @@ public class PlayerHealth : MonoBehaviour
         canTakeDamage = false;
         currentHealth -= damageAmount;
         StartCoroutine(DamageRecoveryRoutine());
+        CheckIfPlayerDeath();
+        UpdateHealthSlider();
+    }
+
+    private void CheckIfPlayerDeath() {
+        if (currentHealth <= 0 && !IsDead) {
+            IsDead = true;
+            Destroy(ActiveWeapon.Instance.gameObject);
+            currentHealth = 0;
+            GetComponent<Animator>().SetTrigger(DEATH_HASH);
+            StartCoroutine(DeathLoadSceneRoutine());
+        }
+    }
+
+    private IEnumerator DeathLoadSceneRoutine() {
+        yield return new WaitForSeconds(2f);
+        Stamina.Instance.ReplenishStaminaOnDeath();
+        Destroy(gameObject);
+        SceneManager.LoadScene(TOWN_TEXT);
     }
 
     private IEnumerator DamageRecoveryRoutine() {
         yield return new WaitForSeconds(damageRecoveryTime);
         canTakeDamage = true;
+    }
+
+    private void UpdateHealthSlider() {
+        if (healthSlider == null) {
+            healthSlider = GameObject.Find(HEALTH_SLIDER_TEXT).GetComponent<Slider>();
+        }
+
+        healthSlider.maxValue = maxHealth;
+        healthSlider.value = currentHealth;
     }
 }

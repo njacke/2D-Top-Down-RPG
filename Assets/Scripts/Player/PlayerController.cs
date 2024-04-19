@@ -35,12 +35,19 @@ public class PlayerController : Singleton<PlayerController>
 
     private void Start() {
         playerControls.Combat.Dash.performed += _ => Dash();
+
         startingMoveSpeed = moveSpeed;
+        
+        ActiveInventory.Instance.EquipStartingWeapon();
     }
 
     //required to enable with new Unity control system
     private void OnEnable(){
         playerControls.Enable();
+    }
+
+    private void  OnDisable() {
+        playerControls.Disable();
     }
 
     private void Update() {
@@ -64,10 +71,10 @@ public class PlayerController : Singleton<PlayerController>
     }
 
     private void Move(){
-        if (!knockback.GettingKnockedBack){
-            //combine floats first to only do vector math once (performance)
-            rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
-        }
+        if (knockback.GettingKnockedBack || PlayerHealth.Instance.IsDead){ return; }
+
+        //combine floats first to only do vector math once (performance)
+        rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
     }
 
     private void AdjustPlayerFacingDirection(){
@@ -86,7 +93,8 @@ public class PlayerController : Singleton<PlayerController>
     }
 
     private void Dash(){
-        if (!isDashing){
+        if (!isDashing && Stamina.Instance.CurrentStamina > 0 && !PlayerHealth.Instance.IsDead) {
+            Stamina.Instance.UseStamina();
             isDashing = true;
             moveSpeed *= dashSpeed;
             myTrailRenderer.emitting = true;
@@ -96,7 +104,7 @@ public class PlayerController : Singleton<PlayerController>
 
     private IEnumerator EndDashRoutine(){
         float dashTime = .2f;
-        float dashCD = .3f;
+        float dashCD = .2f;
         yield return new WaitForSeconds(dashTime);
         moveSpeed = startingMoveSpeed;
         myTrailRenderer.emitting = false;
